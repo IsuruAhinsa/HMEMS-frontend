@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input.jsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuItem, DropdownMenuSeparator,
   //DropdownMenuLabel,
   //DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.jsx";
 import { Link } from "react-router-dom";
+import defineAbilities from '../lib/defineAbility.js'
 
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -19,6 +20,11 @@ import { useAuthContext } from "../hooks/useAuthContext";
 function Header() {
   const { logout } = useLogout();
   const { user } = useAuthContext();
+
+  console.log(user);
+  const abilities = defineAbilities(user);
+
+  const canCreateUser = abilities.can('create', 'User');
 
   const handleLogout = () => {
     logout();
@@ -34,9 +40,11 @@ function Header() {
         <Link to={'/'} className="transition-colors text-foreground hover:text-foreground">
           Dashboard
         </Link>
-        <Link to={'/create/users'} className="transition-colors text-muted-foreground hover:text-foreground">
-          Add&nbsp;User
-        </Link>
+        {canCreateUser && (
+            <Link to={'/create/users'} className="transition-colors text-muted-foreground hover:text-foreground">
+              Add&nbsp;User
+            </Link>
+        )}
       </nav>
       <Sheet>
         <SheetTrigger asChild>
@@ -81,11 +89,15 @@ function Header() {
 
           {user ? (
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={handleLogout}>
-                Logout
+              <DropdownMenuItem>
+                {user.email}
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>
                 Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>
+                Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
           ) : (
