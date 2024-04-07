@@ -3,6 +3,7 @@ import { useAuthContext } from './useAuthContext'
 
 export const useUserContext = () => {
     const [error, setError] = useState(null)
+    const [isSuccess, setIsSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(null)
     const { dispatch } = useAuthContext()
 
@@ -10,28 +11,26 @@ export const useUserContext = () => {
         setIsLoading(true)
         setError(null)
 
-        const response = await fetch('http://localhost:4000/api/user/addUser', {
+        fetch('http://localhost:4000/api/user/addUser', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ email, password,firstName, lastName, addressLine1, addressLine2, contact, role })
+        }).then(res  => {
+            if (res.status === 200) {
+                // save the user to local storage
+                localStorage.setItem('user', JSON.stringify(res.json()));
+                // update the auth context
+                dispatch({type: 'LOGIN', payload: res.json()});
+                // update loading state
+                setIsLoading(false);
+                setIsSuccess(true);
+            }
+        }).catch(err => {
+            setIsLoading(false);
+            setError(err);
+            setIsSuccess(false);
         })
-        const json = await response.json()
-
-        if (!response.ok) {
-            setIsLoading(false)
-            setError(json.error)
-        }
-        if (response.ok) {
-            // save the user to local storage
-            localStorage.setItem('user', JSON.stringify(json))
-
-            // update the auth context
-            dispatch({type: 'LOGIN', payload: json})
-
-            // update loading state
-            setIsLoading(false)
-        }
     }
 
-    return { addUser, isLoading, error }
+    return { addUser, isLoading, error, isSuccess }
 }
