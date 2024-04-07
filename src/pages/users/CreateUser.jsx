@@ -12,14 +12,6 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select.jsx";
-import {
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
 import {Button} from "@/components/ui/button.jsx";
 import {AlertCircle, Loader2} from "lucide-react"
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert.jsx";
@@ -79,7 +71,7 @@ const CreateUser = () => {
                     )}
 
                     {isSuccess && (
-                        <Alert className="bg-success-100">
+                        <Alert className="bg-green-200">
                             <AlertCircle className="h-4 w-4" />
                             <AlertTitle>Success</AlertTitle>
                             <AlertDescription>
@@ -154,30 +146,21 @@ const CreateUser = () => {
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="genericName">Role</Label>
-                                <select
-                                    id="role"
-                                    name="role"
-                                    value={role}
-                                    onChange={(e) => setRole(e.target.value)}
-                                    required
-                                    style={{
-                                        width: "100%",
-                                        padding: "8px",
-                                        marginBottom: "10px",
-                                        border: "1px solid #ccc",
-                                        borderRadius: "4px",
-                                        boxSizing: "border-box"
-                                    }}
-                                >
-                                    <option value="">Select Role</option>
-                                    <option value="wardAdmin">Ward Admin</option>
-                                    <option value="electrician">Electrician</option>
-                                    <option value="electrician">Technical Vendor</option>
-                                    <option value="electrician">Non Technical vendor</option>
-
-                                    {/* Add more options as needed */}
-                                </select>
+                                <Label htmlFor="role">Role</Label>
+                                <Select onValueChange={setRole}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a Role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Select Role</SelectLabel>
+                                            <SelectItem value="wardAdmin">Ward Admin</SelectItem>
+                                            <SelectItem value="Electrician">Electrician</SelectItem>
+                                            <SelectItem value="TechnicalVendor">Technical Vendor</SelectItem>
+                                            <SelectItem value="NonTechnicalVendor">Non Technical vendor</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <Button type="submit" className="w-full" disabled={isLoading}>
                                 {isLoading && (
