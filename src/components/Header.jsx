@@ -7,23 +7,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem, DropdownMenuSeparator,
-  //DropdownMenuLabel,
-  //DropdownMenuSeparator,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu.jsx";
 import { Link } from "react-router-dom";
 import defineAbilities from '../lib/defineAbility.js'
-
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 function Header() {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-
-  console.log(user);
   const abilities = defineAbilities(user);
-
   const canCreateUser = abilities.can('create', 'User');
 
   const handleLogout = () => {
