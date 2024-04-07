@@ -5,21 +5,23 @@ import {useAuthContext} from "@/hooks/useAuthContext.js";
 import Header from "@/components/Header.jsx";
 import CreateReq from "./pages/purchasing/CreateReq";
 import CreateUser from "@/pages/users/CreateUser.jsx";
+import UserList from "./pages/users/UserList";
 
 function App() {
     const { user } = useAuthContext();
     return (
         <BrowserRouter>
-            <div className="flex min-h-screen w-full flex-col">
+            <div className="flex flex-col w-full min-h-screen">
                 {user && <Header />}
 
-                <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+                <main className="flex flex-col flex-1 gap-4 p-4 md:gap-8 md:p-8">
                     <Routes>
                         <Route path="/" element={user ? <Dashboard /> : <Login />} />
                         <Route path="/login" element={!user ? <Login /> : <Navigate to="/" replace />} />
 
                         <Route path="/create/purchasing-req" element={user ? <CreateReq /> : <Navigate to="/" replace />} />
                         <Route path="/create/users" element={user ? <CreateUser /> : <Navigate to="/" replace />} />
+                        <Route path="/userlist" element={user ? <UserList/> : <Navigate to="/" replace />} />
                     </Routes>
                 </main>
             </div>
