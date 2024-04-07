@@ -45,50 +45,50 @@ const Dashboard = () => {
         <>
             <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0 ">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Purchasing request
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={purchasing} className='w-20 ml-4'/>
                     <CardContent>
                         <Link to="/create/purchasing-req">
-                            <Button className='bg-blue-500 h-8'>Purchase</Button>
+                            <Button className='h-8 bg-blue-500'>Purchase</Button>
                         </Link>
                     </CardContent>
                 </Card>
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Assets
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={assets} className='w-20 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Assets</Button>
+                        <Button className='h-8 bg-blue-500'>Show Assets</Button>
 
 
                     </CardContent>
                 </Card>
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Emergency request
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
-                    <img src={emergancy} className='w-16 ml-4 mb-4'/>
+                    <img src={emergancy} className='w-16 mb-4 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Requests</Button>
+                        <Button className='h-8 bg-blue-500'>Show Requests</Button>
 
 
                     </CardContent>
@@ -96,17 +96,17 @@ const Dashboard = () => {
 
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Repair request
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={rapair} className='w-20 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Requests</Button>
+                        <Button className='h-8 bg-blue-500'>Show Requests</Button>
 
 
                     </CardContent>
@@ -114,34 +114,34 @@ const Dashboard = () => {
 
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Ongoing request
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={onging} className='w-20 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Requests</Button>
+                        <Button className='h-8 bg-blue-500'>Show Requests</Button>
 
 
                     </CardContent>
                 </Card>
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Disposal request
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={reject} className='w-20 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Requests</Button>
+                        <Button className='h-8 bg-blue-500'>Show Requests</Button>
 
 
                     </CardContent>
@@ -149,35 +149,35 @@ const Dashboard = () => {
 
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Users
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={user} className='w-20 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Requests</Button>
-
+                     <Link to={'/userlist'}><Button className='h-8 bg-blue-500'>Show Users</Button>
+</Link>   
 
                     </CardContent>
                 </Card>
 
 
                 <Card className='border border-green-500' x-chunk="dashboard-01-chunk-0">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                         <CardTitle className="text-sm font-medium">
                             Quotations
                         </CardTitle>
-                        <Bell className="h-4 w-4 text-muted-foreground"/>
+                        <Bell className="w-4 h-4 text-muted-foreground"/>
                     </CardHeader>
 
                     <img src={user} className='w-20 ml-4'/>
                     <CardContent>
 
-                        <Button className='bg-blue-500 h-8'>Show Requests</Button>
+                        <Button className='h-8 bg-blue-500'>Show Requests</Button>
 
 
                     </CardContent>
@@ -196,10 +196,10 @@ const Dashboard = () => {
                                 Recent transactions from your store.
                             </CardDescription>
                         </div>
-                        <Button asChild size="sm" className="ml-auto gap-1">
+                        <Button asChild size="sm" className="gap-1 ml-auto">
                             <a href="#">
                                 View All
-                                <ArrowUpRight className="h-4 w-4"/>
+                                <ArrowUpRight className="w-4 h-4"/>
                             </a>
                         </Button>
                     </CardHeader>
