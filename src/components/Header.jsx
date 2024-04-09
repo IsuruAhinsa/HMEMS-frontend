@@ -12,6 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import defineAbilities from '../lib/defineAbility.js'
 import { useLogout } from "../hooks/useLogout";
+import { Badge } from "@/components/ui/badge"
 import { useAuthContext } from "../hooks/useAuthContext";
 
 function Header() {
@@ -19,6 +20,7 @@ function Header() {
   const { user } = useAuthContext();
   const abilities = defineAbilities(user);
   const canCreateUser = abilities.can('create', 'User');
+ // console.log(user);
 
   const handleLogout = () => {
     logout();
@@ -85,6 +87,9 @@ function Header() {
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
                 {user.email}
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+              <Badge>{user.role}</Badge>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>

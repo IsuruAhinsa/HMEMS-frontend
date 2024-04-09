@@ -6,7 +6,10 @@ const defineAbilities = (user) => {
             can('create', 'User');
         } else if (user.role === 'NonTechnicalVendor') {
             cannot('create', 'User');
+        }else if (user.role ==='Electrician'){
+            cannot('create','User')
         }
+          
     });
 };
 

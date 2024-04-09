@@ -16,9 +16,9 @@ export const userReducer = (state, action) => {
         ...state,
         users: [...state.users, action.payload],
       };
-      case 'DELETE_WORKOUT':
+      case 'DELETE_USERS':
         return { 
-          workouts: state.workouts.filter(w => w._id !== action.payload._id) 
+          users: state.workouts.filter(w => w._id !== action.payload._id) 
         }
     // Add more cases for other user-related actions if needed
 
