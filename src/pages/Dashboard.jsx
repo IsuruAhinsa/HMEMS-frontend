@@ -8,6 +8,7 @@ import onging from "../assets/imges/ongoing.gif";
 import userpro from "../assets/imges/add.gif";
 import defineAbilities from "@/lib/defineAbility";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import UserList from "./users/UserList";
 import {
   Activity,
   ArrowUpRight,
@@ -42,42 +43,130 @@ const Dashboard = () => {
     const { user } = useAuthContext();
     const abilities = defineAbilities(user);
     const canNotCreateUser = abilities.can("create", "User");
+    const canCreateUser=abilities.cannot("create","User")
+   
   return (
     <>
+
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0 "
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Purchasing request
-            </CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+      {canNotCreateUser && 
 
-          <img src={purchasing} className="w-20 ml-4" />
-          <CardContent>
-            <Link to="/create/purchasing-req">
-              <Button className="h-8 bg-blue-500">Purchase</Button>
-            </Link>
-          </CardContent>
-        </Card>
+<Card
+className="border border-green-500"
+x-chunk="dashboard-01-chunk-0 "
+>
+<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+  <CardTitle className="text-sm font-medium">
+    Purchasing request
+  </CardTitle>
+  <Bell className="w-4 h-4 text-muted-foreground" />
+</CardHeader>
 
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Assets</CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+<img src={purchasing} className="w-20 ml-4" />
+<CardContent>
+  <Link to="/create/purchasing-req">
+    <Button className="h-8 bg-blue-500">Purchase</Button>
+  </Link>
+</CardContent>
+</Card>
+      
+      
+      
+      }
+        
 
-          <img src={assets} className="w-20 ml-4" />
-          <CardContent>
-            <Button className="h-8 bg-blue-500">Show Assets</Button>
-          </CardContent>
-        </Card>
+        
+        {canCreateUser && 
+            <Card
+            className="border border-green-500"
+            x-chunk="dashboard-01-chunk-0 "
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium">
+               Ward Equipments Purchasing request
+              </CardTitle>
+              <Bell className="w-4 h-4 text-muted-foreground" />
+            </CardHeader>
+  
+            <img src={purchasing} className="w-20 ml-4" />
+            <CardContent>
+              <Link to="/wardadmin/purchasingreq">
+                <Button className="h-8 bg-blue-500">Purchase</Button>
+              </Link>
+            </CardContent>
+          </Card>
+  
+        
+        
+        }
+    
+
+
+
+
+
+        
+        
+       { canNotCreateUser && 
+            <Card
+            className="border border-green-500"
+            x-chunk="dashboard-01-chunk-0"
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium">Assets</CardTitle>
+              <Bell className="w-4 h-4 text-muted-foreground" />
+            </CardHeader>
+  
+            <img src={assets} className="w-20 ml-4" />
+            <CardContent>
+              <Button className="h-8 bg-blue-500">Show Assets</Button>
+            </CardContent>
+          </Card>
+
+       
+           
+          
+        }
+        
+          {canCreateUser &&
+            <Card
+            className="border border-green-500"
+            x-chunk="dashboard-01-chunk-0"
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium"> Add Assets</CardTitle>
+              <Bell className="w-4 h-4 text-muted-foreground" />
+            </CardHeader>
+  
+            <img src={assets} className="w-20 ml-4" />
+            <CardContent>
+              <Button className="h-8 bg-blue-500">Add</Button>
+            </CardContent>
+          </Card>
+        
+          
+          
+          }
+      
+        
+       {/* {canCreateAssets(
+             <Card
+             className="border border-green-500"
+             x-chunk="dashboard-01-chunk-0"
+           >
+             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+               <CardTitle className="text-sm font-medium"> Add Assets</CardTitle>
+               <Bell className="w-4 h-4 text-muted-foreground" />
+             </CardHeader>
+   
+             <img src={assets} className="w-20 ml-4" />
+             <CardContent>
+               <Button className="h-8 bg-blue-500">Show Assets</Button>
+             </CardContent>
+           </Card>
+       )} */}
+      
+    
 
         <Card
           className="border border-green-500"
@@ -168,148 +257,34 @@ const Dashboard = () => {
     
 )}
       
+{canNotCreateUser &&
+     <Card
+     className="border border-green-500"
+     x-chunk="dashboard-01-chunk-0"
+   >
+     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+       <CardTitle className="text-sm font-medium">Quotations</CardTitle>
+       <Bell className="w-4 h-4 text-muted-foreground" />
+     </CardHeader>
 
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">Quotations</CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+     <img src={userpro} className="w-20 ml-4" />
+     <CardContent>
+       <Button className="h-8 bg-blue-500">Show Requests</Button>
+     </CardContent>
+   </Card>
 
-          <img src={userpro} className="w-20 ml-4" />
-          <CardContent>
-            <Button className="h-8 bg-blue-500">Show Requests</Button>
-          </CardContent>
-        </Card>
+
+}
+   
       </div>
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
         <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-          <CardHeader className="flex flex-row items-center">
-            <div className="grid gap-2">
-              <CardTitle>Transactions</CardTitle>
-              <CardDescription>
-                Recent transactions from your store.
-              </CardDescription>
-            </div>
-            <Button asChild size="sm" className="gap-1 ml-auto">
-              <a href="#">
-                View All
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-            </Button>
+          <CardHeader className="flex flex-row ">
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Customer</TableHead>
-                  <TableHead className="hidden xl:table-column">Type</TableHead>
-                  <TableHead className="hidden xl:table-column">
-                    Status
-                  </TableHead>
-                  <TableHead className="hidden xl:table-column">Date</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Liam Johnson</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      liam@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">Sale</TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    <Badge className="text-xs" variant="outline">
-                      Approved
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                    2023-06-23
-                  </TableCell>
-                  <TableCell className="text-right">$250.00</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Olivia Smith</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      olivia@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    Refund
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    <Badge className="text-xs" variant="outline">
-                      Declined
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                    2023-06-24
-                  </TableCell>
-                  <TableCell className="text-right">$150.00</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Noah Williams</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      noah@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    Subscription
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    <Badge className="text-xs" variant="outline">
-                      Approved
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                    2023-06-25
-                  </TableCell>
-                  <TableCell className="text-right">$350.00</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Emma Brown</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      emma@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">Sale</TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    <Badge className="text-xs" variant="outline">
-                      Approved
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                    2023-06-26
-                  </TableCell>
-                  <TableCell className="text-right">$450.00</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <div className="font-medium">Liam Johnson</div>
-                    <div className="hidden text-sm text-muted-foreground md:inline">
-                      liam@example.com
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden xl:table-column">Sale</TableCell>
-                  <TableCell className="hidden xl:table-column">
-                    <Badge className="text-xs" variant="outline">
-                      Approved
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell lg:hidden xl:table-column">
-                    2023-06-27
-                  </TableCell>
-                  <TableCell className="text-right">$550.00</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            
+           <UserList/>
+           
           </CardContent>
         </Card>
         <Card x-chunk="dashboard-01-chunk-5">

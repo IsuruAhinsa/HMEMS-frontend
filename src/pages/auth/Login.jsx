@@ -26,7 +26,7 @@ const Login = () => {
         await login(email, password);
     };
     return (
-        <Card className="mx-auto mt-10 sm:mt-40 max-w-sm">
+        <Card className="max-w-sm mx-auto mt-10 sm:mt-40">
             <CardHeader>
                 <CardTitle className="text-2xl">Login</CardTitle>
                 <CardDescription>
@@ -34,7 +34,7 @@ const Login = () => {
                 </CardDescription>
                 {error && (
                     <Alert variant="destructive" className="bg-red-100">
-                        <AlertCircle className="h-4 w-4" />
+                        <AlertCircle className="w-4 h-4" />
                         <AlertTitle>Error</AlertTitle>
                         <AlertDescription>
                             {error}
@@ -59,9 +59,9 @@ const Login = () => {
                         <div className="grid gap-2">
                             <div className="flex items-center">
                                 <Label htmlFor="password">Password</Label>
-                                <a href="#" className="ml-auto inline-block text-sm underline">
+                                {/* <a href="#" className="inline-block ml-auto text-sm underline">
                                     Forgot your password?
-                                </a>
+                                </a> */}
                             </div>
                             <Input id="password" type="password" onChange={(e) => setPassword(e.target.value)}
                                    value={password} required/>

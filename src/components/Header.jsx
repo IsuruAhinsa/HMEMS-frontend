@@ -66,14 +66,14 @@ function Header() {
       </Sheet>
       <div className="flex items-center w-full gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <form className="flex-1 ml-auto sm:flex-initial">
-          <div className="relative">
+          {/* <div className="relative">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Search products..."
               className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
             />
-          </div>
+          </div> */}
         </form>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -92,9 +92,9 @@ function Header() {
               <Badge>{user.role}</Badge>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 Settings
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem onClick={handleLogout}>
                 Logout
               </DropdownMenuItem>

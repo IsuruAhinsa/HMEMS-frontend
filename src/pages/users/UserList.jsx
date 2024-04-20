@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -11,6 +11,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Link } from "react-router-dom";
 
 const UserList = () => {
@@ -27,10 +35,12 @@ const UserList = () => {
     "role",
     "addressLine1",
     "addressLine2",
+    "ward",
   ]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Number of items to display per page
+  const dropdownRef = useRef(null);
 
   // Calculate total number of pages
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
@@ -75,6 +85,20 @@ const UserList = () => {
     }
   }, [sortBy, sortOrder, filteredUsers]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const handleSort = (column) => {
     if (sortBy === column) {
       setSortOrder(sortOrder === "asc" ? "desc" : "asc");
@@ -106,8 +130,6 @@ const UserList = () => {
     }
   };
 
- 
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
@@ -123,7 +145,7 @@ const UserList = () => {
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Users</h1>
+          <h1 className="font-semibold text-gray-900 text- ml-11">Users List</h1>
         </div>
         <a href="/create/users">
           <Button>
@@ -148,31 +170,22 @@ const UserList = () => {
             >
               Toggle Columns
             </Button>
+
             {showDropdown && (
-              <div className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div
-                  className="py-1"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="options-menu"
-                >
-                  {Object.keys(users[3]).map(
+              <div ref={dropdownRef} className="absolute right-0 z-10 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                  {Object.keys(users[10]).map(
                     (column) =>
                       column !== "password" &&
                       column !== "__v" && (
-                        <div
-                          key={column}
-                          className="flex items-center px-4 py-2"
-                        >
+                        <div key={column} className="flex items-center px-4 py-2">
                           <input
                             type="checkbox"
                             checked={visibleColumns.includes(column)}
                             onChange={() => toggleColumnVisibility(column)}
                             className="w-4 h-4 mr-2 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                           />
-                          <span className="text-sm font-semibold">
-                            {column.toUpperCase()}
-                          </span>
+                          <span className="text-sm font-semibold">{column.toUpperCase()}</span>
                         </div>
                       )
                   )}
@@ -205,22 +218,9 @@ const UserList = () => {
                     <th className="px-6 py-3"></th>
                   </tr>
                 </thead>
-                {/* <tbody className="bg-white divide-y divide-gray-200">
-                  {currentItems.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={visibleColumns.length + 1}
-                        className="px-6 py-4 text-sm text-center text-gray-500"
-                      >
-                        No results found
-                      </td>
-                    </tr> */}
                 <tbody className="bg-white divide-y divide-gray-200">
                   {currentItems.map((user) => (
-                   
-                        
-                   <tr key={user._id}>
-                      
+                    <tr key={user._id}>
                       {visibleColumns.map((column) => (
                         <td
                           key={column}
@@ -230,26 +230,16 @@ const UserList = () => {
                         </td>
                       ))}
                       <td className="px-6 py-4 space-x-5 text-sm font-medium text-right whitespace-nowrap">
-                        
                         <Link to={`/users/${user._id}`}>
-                        <button
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Edit
-                        </button>
-
-                          </ Link>
+                          <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
+                        </Link>
                         <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">
                           <AlertDialogTrigger className="text-red-600">Delete</AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                Are you absolutely sure?
-                              </AlertDialogTitle>
+                              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                This action cannot be undone. This will
-                                permanently delete your account and remove
-                                your data from our servers.
+                                This action cannot be undone. This will permanently delete your account and remove your data from our servers.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

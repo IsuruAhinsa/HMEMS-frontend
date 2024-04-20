@@ -7,6 +7,7 @@ import CreateReq from "./pages/purchasing/CreateReq";
 import CreateUser from "@/pages/users/CreateUser.jsx";
 import UserList from "./pages/users/UserList";
 import UpdateUser from "./pages/users/EditUser";
+import WardPR from "./pages/purchasing/WardAdminCreateReq";
 function App() {
     const { user } = useAuthContext();
     return (
@@ -23,6 +24,9 @@ function App() {
                         <Route path="/create/users" element={user ? <CreateUser /> : <Navigate to="/create/users" replace />} />
                         <Route path="/userlist" element={user ? <UserList/> : <Navigate to="/" replace />} />
                         <Route path="/users/:userId" element={user ? <UpdateUser /> : null} />
+                        <Route path="/wardadmin/purchasingreq" element={user ? <WardPR /> : null} />
+                        
+                        
 
                     </Routes>
                 </main>

@@ -5,14 +5,14 @@ export const useUserContext = () => {
     const [isSuccess, setIsSuccess] = useState(false)
     const [isLoading, setIsLoading] = useState(null)
 
-    const addUser = async (email, password,firstName, lastName, addressLine1, addressLine2, contact, role) => {
+    const addUser = async (email, password,firstName, lastName, addressLine1, addressLine2, contact, role ,ward) => {
         setIsLoading(true)
         setError(null)
 
         fetch('http://localhost:4000/api/user/addUser', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, password,firstName, lastName, addressLine1, addressLine2, contact, role })
+            body: JSON.stringify({ email, password,firstName, lastName, addressLine1, addressLine2, contact, role ,ward })
         }).then(async res  => {
             const json = await res.json();
             if (res.status === 200) {
