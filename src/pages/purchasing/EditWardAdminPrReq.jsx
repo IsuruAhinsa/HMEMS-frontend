@@ -1,8 +1,7 @@
-import React, {useState} from "react";
-import {useUserContext} from "@/hooks/PurchasingEquipment.js";
-import {useAuthContext} from "@/hooks/useAuthContext.js";
+import React, { useState, useEffect } from "react";
 
-import {Button} from "@/components/ui/button";
+
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -10,9 +9,9 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {Textarea} from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea"
 import {
     Select,
     SelectContent,
@@ -22,8 +21,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert.jsx";
-import {AlertCircle} from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.jsx";
+import { AlertCircle } from "lucide-react";
+import { useParams } from "react-router-dom";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -32,42 +32,60 @@ import {
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb.jsx";
 
-
-const WardPR  = () => {
-    const {dispatch} = useUserContext();
-    const {user} = useAuthContext();
-
+const WardPREdit = () => {
+   
+    
     const [serialNumber, setSerialNumber] = useState("");
-    const [reason,setReason]=useState("");
-    const [ward,setWard]=useState("");
+    const [reason, setReason] = useState("");
+    const [ward, setWard] = useState("");
     const [brand, setBrand] = useState("");
     const [model, setModel] = useState("");
     const [purchasingDate, setPurchasingDate] = useState("");
     const [warrantyPeriod, setWarrantyPeriod] = useState("");
-    const [numberOfUnit,setNumberOfUnit] = useState("");
-   
+    const [numberOfUnit, setNumberOfUnit] = useState("");
     const [genericName, setGenericName] = useState("");
-    const[prType,setPrType]=useState("");
     const [comment, setComment] = useState("");
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState("");
-    const resetFormFields = () => {
-        setSerialNumber("");
-        setReason("");
-        setWard("");
-        setBrand("");
-        setModel("");
-        setPurchasingDate("");
-        setWarrantyPeriod("");
-        setNumberOfUnit("");
-        setGenericName("");
-        setPrType("");
-        setComment("");
-    }
+   const [isSuccess, setIsSuccess] = useState(false);
+   const [error, setError] = useState("");
+   
+    const { wardId } = useParams();
+
+    
+        const fetchWardpr = async () => {
+            try {
+                console.log("Ward ID:", wardId); // Log wardId
+                const responses = await fetch(`http://localhost:4000/api/wardPurchasingReq/${wardId}`);
+         
+    
+                if (responses.ok) {
+                    const wardData = await responses.json();
+                  
+                    setSerialNumber(wardData.serialNumber || "");
+                    setReason(wardData.reason || "");
+                    setWard(wardData.ward || "");
+                    setBrand(wardData.brand || "");
+                    setModel(wardData.model || "");
+                    setPurchasingDate(wardData.purchasingDate || "");
+                    setWarrantyPeriod(wardData.warrantyPeriod || "");
+                    setNumberOfUnit(wardData.numberOfUnit || "");
+                    setGenericName(wardData.genericName || "");
+                    setComment(wardData.comment || "");
+                } else {
+                    console.error('Failed to fetch ward data:', responses.statusText);
+                }
+            } catch (error) {
+                console.error('Failed to fetch ward data:', error.message);
+            }
+        };
+    useEffect(()=>{
+        fetchWardpr();
+    }, [wardId]);
+    
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const CreateReq = {
+        const updatedReq = {
             serialNumber,
             reason,
             ward,
@@ -77,36 +95,31 @@ const WardPR  = () => {
             warrantyPeriod,
             genericName,
             numberOfUnit,
-            prType,
             comment,
         };
 
         try {
-            fetch("http://localhost:4000/api/wardPurchasingReq/wardprcreate", {
-                method: "POST",
-                body: JSON.stringify(CreateReq),
+            const response = await fetch(`http://localhost:4000/api/wardPurchasingReq/${wardId}`, {
+                method: 'PATCH',
                 headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${user.token}`,
+                    'Content-Type': 'application/json',
                 },
-            }).then(async res => {
-                const json = await res.json();
-
-                if (res.ok) {
-                    setIsSuccess(true);
-                    resetFormFields();
-                    dispatch({type: "createAddUser", payload: json});
-                }
-
-                if (!res.ok) {
-                    setError(json.error);
-                    setIsSuccess(false);
-                }
+                body: JSON.stringify(updatedReq),
             });
+
+            if (response.ok) {
+                setIsSuccess(true);
+                setError("");
+            } else {
+                setIsSuccess(false);
+                setError("Failed to update purchasing request");
+            }
         } catch (error) {
             console.error("Error:", error);
+            setIsSuccess(false);
+            setError("Failed to update purchasing request");
         }
-    };
+    }
 
     return (
         <div>
@@ -125,11 +138,11 @@ const WardPR  = () => {
             </div>
             <Card className="max-w-5xl mx-auto w-2xl">
                 <CardHeader>
-                    <CardTitle className="text-2xl">Enter Purchasing Equipment Information</CardTitle>
+                    <CardTitle className="text-2xl">Enter Equipment Information</CardTitle>
                     <CardDescription>Please fill out the following fields:</CardDescription>
                     {error && (
                         <Alert variant="destructive" className="bg-red-100">
-                            <AlertCircle className="w-4 h-4"/>
+                            <AlertCircle className="w-4 h-4" />
                             <AlertTitle>Error</AlertTitle>
                             <AlertDescription>
                                 {error}
@@ -139,10 +152,10 @@ const WardPR  = () => {
 
                     {isSuccess && (
                         <Alert className="bg-green-200">
-                            <AlertCircle className="w-4 h-4"/>
+                            <AlertCircle className="w-4 h-4" />
                             <AlertTitle>Success</AlertTitle>
                             <AlertDescription>
-                                Purchasing request create successfully
+                                Purchasing request updated successfully
                             </AlertDescription>
                         </Alert>
                     )}
@@ -162,13 +175,12 @@ const WardPR  = () => {
                                 />
                             </div>
 
-
                             <div className="grid gap-2">
                                 <Label htmlFor="serialNumber">purchasing Reason</Label>
                                 <Select onValueChange={setReason}>
-                                    
+
                                     <SelectTrigger>
-                                        <SelectValue placeholder="purchasing Reason"/>
+                                        <SelectValue placeholder="purchasing Reason" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -183,46 +195,38 @@ const WardPR  = () => {
                                     </SelectContent>
                                 </Select>
                             </div>
-                             
 
                             <div className="grid gap-2">
                                 <Label htmlFor="serialNumber">Ward /Unit Name</Label>
                                 <Select onValueChange={setWard}>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="select ward/Unit"/>
+                                        <SelectValue placeholder="select ward/Unit" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                    <SelectGroup>
-                                                <SelectLabel>Select Ward</SelectLabel>
-                                                <SelectItem value="SurgicalWard">Surgical Ward</SelectItem>
-                                                <SelectItem value="MedicalWard">Medical Ward</SelectItem>
-                                                <SelectItem value="Children_Ward">Children's Ward</SelectItem>
-                                                <SelectItem value="Gynecology_Ward">Gynecology Ward</SelectItem>
-                                                <SelectItem value="Meternity_Ward">Meternity Ward</SelectItem>
-                                                <SelectItem value="Postnatal_Ward">Postnatal Ward</SelectItem>
-                                                <SelectItem value="Maternal_Sex_Ward">Maternal Sex Ward</SelectItem>
-                                                <SelectItem value="Emergency_Ward">Emergency Ward</SelectItem>
-                                            
-                                                <SelectLabel>Special Units  </SelectLabel>
-                                                <SelectGroup>
+                                        <SelectGroup>
+                                            <SelectLabel>Select Ward</SelectLabel>
+                                            <SelectItem value="SurgicalWard">Surgical Ward</SelectItem>
+                                            <SelectItem value="MedicalWard">Medical Ward</SelectItem>
+                                            <SelectItem value="Children_Ward">Children's Ward</SelectItem>
+                                            <SelectItem value="Gynecology_Ward">Gynecology Ward</SelectItem>
+                                            <SelectItem value="Meternity_Ward">Meternity Ward</SelectItem>
+                                            <SelectItem value="Postnatal_Ward">Postnatal Ward</SelectItem>
+                                            <SelectItem value="Maternal_Sex_Ward">Maternal Sex Ward</SelectItem>
+                                            <SelectItem value="Emergency_Ward">Emergency Ward</SelectItem>
+
+                                            <SelectLabel>Special Units  </SelectLabel>
+                                            <SelectGroup>
                                                 <SelectItem value="Scan_Room">Scan Room</SelectItem>
                                                 <SelectItem value="ICU">ICU</SelectItem>
                                                 <SelectItem value="XRay_Room">X-Ray Room</SelectItem>
                                                 <SelectItem value="Radiology_Room">Radiology Room</SelectItem>
                                                 <SelectItem value="Lab">Lab</SelectItem>
-                                                </SelectGroup>
-                                              
-                                                
-                                           
                                             </SelectGroup>
+
+                                        </SelectGroup>
                                     </SelectContent>
                                 </Select>
                             </div>
-                             
-                           
-           
-
-                            
 
                             <div className="grid gap-2">
                                 <Label htmlFor="brand">Brand</Label>
@@ -247,9 +251,6 @@ const WardPR  = () => {
                                 />
                             </div>
 
-                            
-
-                            
                             <div className="grid gap-2">
                                 <Label htmlFor="purchasingDate">Purchasing Date</Label>
                                 <Input
@@ -297,40 +298,18 @@ const WardPR  = () => {
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="serialNumber">Request Type</Label>
-                                <Select onValueChange={setPrType}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Type"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                    <SelectGroup>
-                                                <SelectLabel></SelectLabel>
-                                                <SelectItem value="SurgicalWard" ><div className="text-red-700">Emergency (1-3 days)</div></SelectItem>
-                                                <SelectItem value="MedicalWard"><div className="text-amber-500">Stand (with in a week)</div></SelectItem>
-                                                <SelectItem value="Children_Ward"><div className="text-green-700">Minor (with in month)</div></SelectItem>
-                                                <SelectItem value="other"> <div className="text-sky-600">Other</div></SelectItem>
-                                            </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                             
-                           
-                            
-                            
-
-                            <div className="grid gap-2">
                                 <Label htmlFor="comment">Comment</Label>
                                 <Textarea id="comment"
-                                          type="text"
-                                          placeholder="Enter Comment"
-                                          required
-                                          onChange={(e) => setComment(e.target.value)}
-                                          value={comment}/>
+                                    type="text"
+                                    placeholder="Enter Comment"
+                                    required
+                                    onChange={(e) => setComment(e.target.value)}
+                                    value={comment} />
                             </div>
                         </div>
                         <div className="mt-3">
-                            <Button type="submit" className="w-full">
-                                Submit
+                        <Button type="submit" className="w-full">
+                            Edit Ward Purchasing Request
                             </Button>
                         </div>
                     </form>
@@ -340,4 +319,4 @@ const WardPR  = () => {
     );
 };
 
-export default WardPR ;
+export default WardPREdit;

@@ -8,6 +8,11 @@ import CreateUser from "@/pages/users/CreateUser.jsx";
 import UserList from "./pages/users/UserList";
 import UpdateUser from "./pages/users/EditUser";
 import WardPR from "./pages/purchasing/WardAdminCreateReq";
+import WardPrList from "./pages/purchasing/WardAdminPrReqList";
+import AddEquipment from "./pages/equipment/addEquipment";
+import WardPREdit from "./pages/purchasing/EditWardAdminPrReq";
+import EquipmentList from "./pages/equipment/equipmentList";
+import ShowAssets from "./pages/equipment/showAssets";
 function App() {
     const { user } = useAuthContext();
     return (
@@ -25,6 +30,13 @@ function App() {
                         <Route path="/userlist" element={user ? <UserList/> : <Navigate to="/" replace />} />
                         <Route path="/users/:userId" element={user ? <UpdateUser /> : null} />
                         <Route path="/wardadmin/purchasingreq" element={user ? <WardPR /> : null} />
+                        <Route path="/wardadmin/wardpurchasingreqlist" element={user ? <WardPrList /> : null} />
+                        <Route path="/wardadmin/addequipment" element={user ? <AddEquipment /> : null} />
+                        <Route path="/wardadmin/wardpredit" element={user ? <WardPREdit /> : null} />
+                        <Route path="/wardadmin/equipmentlist" element={user ? <EquipmentList /> : null} />
+                        
+                        <Route path="/admin/show/equipmentlist" element={user ? <ShowAssets /> : null} />
+                        
                         
                         
 

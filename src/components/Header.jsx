@@ -3,6 +3,7 @@ import { CircleUser, Menu, Package2, Search } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Input } from "@/components/ui/input.jsx";
+import Logo from "../assets/imges/Logo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,10 +30,13 @@ function Header() {
   return (
     <header className="sticky top-0 z-50 flex items-center h-16 gap-4 px-4 border-b bg-background md:px-6">
       <nav className="flex-col hidden gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-        <a href="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+        {/* <a href="#" className="flex items-center gap-2 text-lg font-semibold md:text-base">
           <Package2 className="w-6 h-6" />
           <span className="sr-only">Acme Inc</span>
-        </a>
+        </a> */}
+        
+        <img src={Logo} className="ml-4 w-14" />
+        
         <Link to={'/'} className="transition-colors text-foreground hover:text-foreground">
           Dashboard
         </Link>

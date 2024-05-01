@@ -103,7 +103,7 @@ const CreateReq = () => {
 
     return (
         <div>
-            <div className="my-4 flex justify-end">
+            <div className="flex justify-end my-4">
                 <Breadcrumb className="-mt-6">
                     <BreadcrumbList>
                         <BreadcrumbItem>
@@ -122,7 +122,7 @@ const CreateReq = () => {
                     <CardDescription>Please fill out the following fields:</CardDescription>
                     {error && (
                         <Alert variant="destructive" className="bg-red-100">
-                            <AlertCircle className="h-4 w-4"/>
+                            <AlertCircle className="w-4 h-4"/>
                             <AlertTitle>Error</AlertTitle>
                             <AlertDescription>
                                 {error}
@@ -132,7 +132,7 @@ const CreateReq = () => {
 
                     {isSuccess && (
                         <Alert className="bg-green-200">
-                            <AlertCircle className="h-4 w-4"/>
+                            <AlertCircle className="w-4 h-4"/>
                             <AlertTitle>Success</AlertTitle>
                             <AlertDescription>
                                 Purchasing request create successfully
@@ -142,7 +142,7 @@ const CreateReq = () => {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit}>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div className="grid gap-2">
                                 <Label htmlFor="serialNumber">Serial Number</Label>
                                 <Input
