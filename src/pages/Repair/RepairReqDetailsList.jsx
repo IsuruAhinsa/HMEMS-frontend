@@ -11,44 +11,28 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import defineAbilities from "@/lib/defineAbility";
 
-const WardPrList = () => {
+const RepairReqDetailsList = () => {
   const { user } = useAuthContext();
   const abilities = defineAbilities(user);
   const canNotCreateUser = abilities.can("create", "User");
   const canCreateUser = abilities.cannot("create", "User");
 
-  const [ward, setWard] = useState([]);
-  const [filteredWard, setFilteredWard] = useState([]);
+  const [repairInsReqs, setRepairInsReqs] = useState([]);
+  const [filteredRepairInsReqs, setFilteredRepairInsReqs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
   const [visibleColumns, setVisibleColumns] = useState([
-    // "_id",
     "serialNumber",
-    "reason",
-    "ward",
-    "brand",
-    "condition",
     "model",
-    "prType",
-    "purchasingDate",
-    "warrantyPeriod",
+    "comment",
+    "brand",
+    "ValidationValue",
     "genericName",
-    "numberOfUnit",
-   
-    
+    "insdate",
   ]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,66 +40,66 @@ const WardPrList = () => {
   const dropdownRef = useRef(null);
 
   // Calculate total number of pages
-  const totalPages = Math.ceil(filteredWard.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredRepairInsReqs.length / itemsPerPage);
 
   useEffect(() => {
-    const fetchWardData = async () => {
+    const fetchRepairInsReqsData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:4000/api/wardPurchasingReq/getall"
+          "http://localhost:4000/api/insdate/"
         );
         if (response.ok) {
           const data = await response.json();
-          setWard(data);
-          setFilteredWard(data);
+          setRepairInsReqs(data);
+          setFilteredRepairInsReqs(data);
         } else {
-          console.error("Failed to fetch ward data:", response.statusText);
+          console.error("Failed to fetch repair inspection requests:", response.statusText);
         }
       } catch (error) {
-        console.error("Failed to fetch ward data:", error.message);
+        console.error("Failed to fetch repair inspection requests:", error.message);
       }
     };
 
-    fetchWardData();
+    fetchRepairInsReqsData();
   }, []);
 
   const handleDelete = async (id) => {
     const response = await fetch(
-      `http://localhost:4000/api/wardPurchasingReq/${id}`,
+      `http://localhost:4000/api/insdate/${id}`,
       {
         method: "DELETE",
       }
     );
 
     if (response.ok) {
-      const updatedwards = ward.filter((ward) => ward._id !== id);
-      setWard(updatedwards);
-      setFilteredWard(updatedwards);
+      const updatedRepairInsReqs = repairInsReqs.filter((req) => req._id !== id);
+      setRepairInsReqs(updatedRepairInsReqs);
+      setFilteredRepairInsReqs(updatedRepairInsReqs);
     } else {
-      console.error("Failed to delete user:", response.statusText);
+      console.error("Failed to delete repair inspection request:", response.statusText);
     }
   };
 
   useEffect(() => {
-    const filtered = ward.filter((wardItem) =>
-      Object.values(wardItem).some((value) =>
+    const filtered = repairInsReqs.filter((req) =>
+      Object.values(req).some((value) =>
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-    setFilteredWard(filtered);
+    setFilteredRepairInsReqs(filtered);
     setCurrentPage(1); // Reset current page when search term changes
-  }, [searchTerm, ward]);
+  }, [searchTerm, repairInsReqs]);
 
   useEffect(() => {
     if (sortBy && sortOrder) {
-      const sortedData = [...filteredWard].sort((a, b) => {
+      const sortedData = [...filteredRepairInsReqs].sort((a, b) => {
         if (a[sortBy] < b[sortBy]) return sortOrder === "asc" ? -1 : 1;
         if (a[sortBy] > b[sortBy]) return sortOrder === "asc" ? 1 : -1;
         return 0;
       });
-      setFilteredWard(sortedData);
+      setFilteredRepairInsReqs(sortedData);
     }
-  }, [sortBy, sortOrder, filteredWard]);
+  }, [sortBy, sortOrder, filteredRepairInsReqs]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -150,7 +134,7 @@ const WardPrList = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredWard.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredRepairInsReqs.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -162,13 +146,12 @@ const WardPrList = () => {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-6 mt-8">
-        <div class="relative ...">
+        <div className="relative">
           <p className="-mt-4 font-semibold text-gray-900">
-            Ward Purchasing Request
+            Repair Inspection Requests
           </p>
         </div>
         <div className="justify-end mb-4 sm:flex sm:items-center">
-          <div className="sm:flex sm:items-center"></div>
           <div className="relative flex space-x-6">
             <input
               type="text"
@@ -180,7 +163,7 @@ const WardPrList = () => {
 
             <Button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="right-0 px-2 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-r shadow-sm nset-y-0 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="right-0 px-2 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-r shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Toggle Columns
             </Button>
@@ -196,7 +179,7 @@ const WardPrList = () => {
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
                 >
-                  {Object.keys(ward[0]).map(
+                  {Object.keys(repairInsReqs[0]).map(
                     (column) =>
                       column !== "password" &&
                       column !== "__v" && (
@@ -245,110 +228,84 @@ const WardPrList = () => {
                     <th className="px-6 py-3"></th>
                   </tr>
                 </thead>
-
-
-                
-                {/* <tbody className="bg-white divide-y divide-gray-200">
-                  {currentItems.map((wardItem) => (
-                    <tr key={wardItem._id}>
-                      {visibleColumns.map((column) => (
-                        <td
-                          key={column}
-                          className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap"
-                        >
-                          {wardItem[column]}
-                        </td>
-                      ))} */}
-
-
-<tbody className="bg-white divide-y divide-gray-200">
-                  {currentItems.map((wardItem) => (
-                      <tr
-                      key={wardItem._id}
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {currentItems.map((req) => (
+                    <tr
+                      key={req._id}
                       className={`${
-                        wardItem.prType === "Emergency" ? "bg-red-200" : 
-                        wardItem.prType === "Stand" ? "bg-yellow-200" : 
-                        wardItem.prType === "Minor" ? "bg-green-200" : 
-                        wardItem.prType === "other" ? "bg-blue-200" : 
+                        req.ValidationValue === "Critical" ? "bg-red-200" : 
+                        req.ValidationValue === "Warning" ? "bg-yellow-200" : 
+                        req.ValidationValue === "Safe" ? "bg-green-200" : 
                         ""
                       }`}
-                      >
+                    >
                       {visibleColumns.map((column) => (
                         <td
                           key={column}
                           className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap"
                         >
-                          {wardItem[column]}
+                          {req[column]}
                         </td>
                       ))}
-
-                      {canCreateUser && (
-                        <td className="px-6 py-4 space-x-5 text-sm font-medium text-right whitespace-nowrap">
-                          <Link to={`/wardadmin/wardpredit`}>
-                            <button className="text-indigo-600 hover:text-indigo-900">
-                              Edit
-                            </button>
-                          </Link>
-                          <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">
-                            <AlertDialogTrigger className="text-red-600">
-                              Delete
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  This action cannot be undone. This will
-                                  permanently delete your account and remove
-                                  your data from our servers.
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDelete(wardItem._id)}
-                                >
-                                  Continue
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </td>
-                      )}
-                   
-                      <td className="px-6 py-4 space-x-5 text-sm font-medium text-right whitespace-nowrap">
-                      {canNotCreateUser && (
-                        <Link to={`/Accept/purchasing-req/${wardItem._id}`}>
-                          <button className="text-indigo-600 hover:text-indigo-900">
-                            Accept
-                          </button>
-                        </Link>
-                      )}
+                      <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              Close Job
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Are you sure you want to delete this request?
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                              Your Repair is Now Complete OR get the Tecnicient Advice
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Not Yet</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDelete(req._id)}
+                              >
+                                Yes
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-gray-200">
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => paginate(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => paginate(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Next
+                  </button>
+                </div>
+                
+              </div>
             </div>
           </div>
         </div>
-        <nav className="flex justify-center mt-4">
-          <ul className="flex">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <li
-                key={i}
-                onClick={() => paginate(i + 1)}
-                className="px-3 py-1 cursor-pointer"
-              >
-                {i + 1}
-              </li>
-            ))}
-          </ul>
-        </nav>
       </div>
     </div>
   );
 };
 
-export default WardPrList;
+export default RepairReqDetailsList ;

@@ -11,111 +11,128 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import defineAbilities from "@/lib/defineAbility";
+import SetQuatation from "../quatation/setQuatation";
+import defineVendorAbilities from "../../lib/venderability";
 
-const WardPrList = () => {
+const SuperAdminPrList = () => {
   const { user } = useAuthContext();
   const abilities = defineAbilities(user);
+  const vendorAbility =defineVendorAbilities(user);
   const canNotCreateUser = abilities.can("create", "User");
   const canCreateUser = abilities.cannot("create", "User");
+  const canNotCreateQuotation=vendorAbility.can("create","Quotation")
+  const canCreateQuotation =vendorAbility.cannot ("create","Quotation")
 
-  const [ward, setWard] = useState([]);
-  const [filteredWard, setFilteredWard] = useState([]);
+
+  
+
+  
+  const [acceptedRequests, setAcceptedRequests] = useState({});
+
+
+  
+  const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
   const [visibleColumns, setVisibleColumns] = useState([
-    // "_id",
-    "serialNumber",
-    "reason",
-    "ward",
-    "brand",
+    "_id",
     "condition",
+    "serialNumber",
+    "vendor",
+    "brand",
     "model",
-    "prType",
     "purchasingDate",
     "warrantyPeriod",
     "genericName",
+    "equipmentType",
     "numberOfUnit",
-   
-    
+    "ward",
+    "orderNumber",
+    "comment",
   ]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(12); // Number of items to display per page
+  const [itemsPerPage] = useState(10);
   const dropdownRef = useRef(null);
 
-  // Calculate total number of pages
-  const totalPages = Math.ceil(filteredWard.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
 
+
+  
   useEffect(() => {
-    const fetchWardData = async () => {
+    const fetchRequests = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:4000/api/wardPurchasingReq/getall"
-        );
+        const response = await fetch("http://localhost:4000/api/purchasingReq");
         if (response.ok) {
           const data = await response.json();
-          setWard(data);
-          setFilteredWard(data);
+          setRequests(data);
+          setFilteredRequests(data);
         } else {
-          console.error("Failed to fetch ward data:", response.statusText);
+          console.error(
+            "Failed to fetch purchasing requests:",
+            response.statusText
+          );
         }
       } catch (error) {
-        console.error("Failed to fetch ward data:", error.message);
+        console.error("Failed to fetch purchasing requests:", error.message);
       }
     };
 
-    fetchWardData();
+    fetchRequests();
   }, []);
+
+
+
+
+
+
+
+
+
+
 
   const handleDelete = async (id) => {
     const response = await fetch(
-      `http://localhost:4000/api/wardPurchasingReq/${id}`,
+      `http://localhost:4000/api/purchasingReq/${id}`,
       {
         method: "DELETE",
       }
     );
 
     if (response.ok) {
-      const updatedwards = ward.filter((ward) => ward._id !== id);
-      setWard(updatedwards);
-      setFilteredWard(updatedwards);
+      const updatedRequests = requests.filter((request) => request._id !== id);
+      setRequests(updatedRequests);
+      setFilteredRequests(updatedRequests);
     } else {
-      console.error("Failed to delete user:", response.statusText);
+      console.error("Failed to delete request:", response.statusText);
     }
   };
 
   useEffect(() => {
-    const filtered = ward.filter((wardItem) =>
-      Object.values(wardItem).some((value) =>
+    const filtered = requests.filter((request) =>
+      Object.values(request).some((value) =>
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
-    setFilteredWard(filtered);
-    setCurrentPage(1); // Reset current page when search term changes
-  }, [searchTerm, ward]);
+    setFilteredRequests(filtered);
+    setCurrentPage(1);
+  }, [searchTerm, requests]);
 
   useEffect(() => {
     if (sortBy && sortOrder) {
-      const sortedData = [...filteredWard].sort((a, b) => {
+      const sortedData = [...filteredRequests].sort((a, b) => {
         if (a[sortBy] < b[sortBy]) return sortOrder === "asc" ? -1 : 1;
         if (a[sortBy] > b[sortBy]) return sortOrder === "asc" ? 1 : -1;
         return 0;
       });
-      setFilteredWard(sortedData);
+      setFilteredRequests(sortedData);
     }
-  }, [sortBy, sortOrder, filteredWard]);
+  }, [sortBy, sortOrder, filteredRequests]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -150,25 +167,23 @@ const WardPrList = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredWard.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredRequests.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const resetSorting = () => {
-    setSortBy(null);
-    setSortOrder(null);
-  };
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-6 mt-8">
-        <div class="relative ...">
+        <div className="relative">
           <p className="-mt-4 font-semibold text-gray-900">
-            Ward Purchasing Request
+            {" "}
+            Super Admin Purchasing Request
           </p>
         </div>
         <div className="justify-end mb-4 sm:flex sm:items-center">
-          <div className="sm:flex sm:items-center"></div>
           <div className="relative flex space-x-6">
             <input
               type="text"
@@ -177,14 +192,12 @@ const WardPrList = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-40 p-4 py-2 border rounded shadow-md"
             />
-
             <Button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="right-0 px-2 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-r shadow-sm nset-y-0 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="right-0 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-r shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Toggle Columns
             </Button>
-
             {showDropdown && (
               <div
                 ref={dropdownRef}
@@ -196,7 +209,7 @@ const WardPrList = () => {
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
                 >
-                  {Object.keys(ward[0]).map(
+                  {Object.keys(requests[0]).map(
                     (column) =>
                       column !== "password" &&
                       column !== "__v" && (
@@ -221,10 +234,15 @@ const WardPrList = () => {
             )}
           </div>
         </div>
-
         <div className="overflow-x-auto sm:-mx-4 sm:-my-2 sm:mx-6 sm:my-0">
           <div className="inline-block min-w-full py-2 align-middle">
             <div className="overflow-hidden shadow md:rounded-lg">
+
+              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+              @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+              
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -245,54 +263,74 @@ const WardPrList = () => {
                     <th className="px-6 py-3"></th>
                   </tr>
                 </thead>
-
-
-                
-                {/* <tbody className="bg-white divide-y divide-gray-200">
-                  {currentItems.map((wardItem) => (
-                    <tr key={wardItem._id}>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {currentItems.map((request) => (
+                    <tr key={request._id}>
                       {visibleColumns.map((column) => (
                         <td
                           key={column}
                           className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap"
                         >
-                          {wardItem[column]}
-                        </td>
-                      ))} */}
-
-
-<tbody className="bg-white divide-y divide-gray-200">
-                  {currentItems.map((wardItem) => (
-                      <tr
-                      key={wardItem._id}
-                      className={`${
-                        wardItem.prType === "Emergency" ? "bg-red-200" : 
-                        wardItem.prType === "Stand" ? "bg-yellow-200" : 
-                        wardItem.prType === "Minor" ? "bg-green-200" : 
-                        wardItem.prType === "other" ? "bg-blue-200" : 
-                        ""
-                      }`}
-                      >
-                      {visibleColumns.map((column) => (
-                        <td
-                          key={column}
-                          className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap"
-                        >
-                          {wardItem[column]}
+                          {request[column]}
                         </td>
                       ))}
-
-                      {canCreateUser && (
+                      {
                         <td className="px-6 py-4 space-x-5 text-sm font-medium text-right whitespace-nowrap">
-                          <Link to={`/wardadmin/wardpredit`}>
-                            <button className="text-indigo-600 hover:text-indigo-900">
-                              Edit
-                            </button>
-                          </Link>
-                          <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">
+                           
+                            <>
+                             
+                            <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">
+  {canCreateUser && (
+    <>
+    
+      {/* <Link to={`/vendor/quatation/setquatation/${request._id}`}>
+        <button className="text-green-600 hover:text-indigo-900">
+          ACCEPT
+        </button>
+      </Link> */}
+      
+      <AlertDialogTrigger asChild>
+        <button className="text-green-600 hover:text-indigo-900">
+          Accept
+        </button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you absolutely sure?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the purchasing request.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <Link to={`/vendor/quatation/setquatation/${request._id}`}>
+          <AlertDialogAction >
+            Continue
+          </AlertDialogAction>
+          </Link>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </>
+  )}
+</AlertDialog>
+
+                        
+                            
+                             
+                              {/* <button className="text-red-600 hover:text-indigo-900">
+                                REJECT
+                              </button> */}
+
+                              <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">
+
+                              {canCreateUser &&   
                             <AlertDialogTrigger className="text-red-600">
-                              Delete
+                            REJECT
                             </AlertDialogTrigger>
+}
                             <AlertDialogContent>
                               <AlertDialogHeader>
                                 <AlertDialogTitle>
@@ -300,32 +338,59 @@ const WardPrList = () => {
                                 </AlertDialogTitle>
                                 <AlertDialogDescription>
                                   This action cannot be undone. This will
-                                  permanently delete your account and remove
-                                  your data from our servers.
+                                  permanently delete the purchasing request.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={() => handleDelete(wardItem._id)}
+                                  onClick={() => handleDelete(request._id)}
                                 >
                                   Continue
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
-                        </td>
-                      )}
-                   
-                      <td className="px-6 py-4 space-x-5 text-sm font-medium text-right whitespace-nowrap">
-                      {canNotCreateUser && (
-                        <Link to={`/Accept/purchasing-req/${wardItem._id}`}>
-                          <button className="text-indigo-600 hover:text-indigo-900">
-                            Accept
+                            </>
+                          
+                          
+                          {canNotCreateUser && 
+                          <>
+
+<button className="text-indigo-600 hover:text-indigo-900">
+                            Edit
                           </button>
-                        </Link>
-                      )}
-                      </td>
+
+                          <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">
+                            <AlertDialogTrigger className="text-red-600">
+                              Delete
+                            </AlertDialogTrigger>
+
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete the purchasing request.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDelete(request._id)}
+                                >
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                          </>
+                          }
+                          
+                        </td>
+                      }
                     </tr>
                   ))}
                 </tbody>
@@ -351,4 +416,4 @@ const WardPrList = () => {
   );
 };
 
-export default WardPrList;
+export default SuperAdminPrList;

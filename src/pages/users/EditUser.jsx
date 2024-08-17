@@ -19,13 +19,13 @@ import { useParams } from "react-router-dom";
 
 const EditUser = () => {
     const [email, setEmail] = useState("");
-   // const [password, setPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [addressLine1, setAddressLine1] = useState("");
     const [addressLine2, setAddressLine2] = useState("");
     const [contact, setContact] = useState("");
     const [role, setRole] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const { addUser, error, isLoading, isSuccess } = useUserContext();
     const { userId } = useParams();
 
@@ -38,7 +38,7 @@ const EditUser = () => {
                 setFirstName(userData.firstName);
                 setLastName(userData.lastName);
                 setAddressLine1(userData.addressLine1);
-                setAddressLine2(userData.addressLine2 || ""); // Handle optional address line 2
+                setAddressLine2(userData.addressLine2 || "");
                 setContact(userData.contact);
                 setRole(userData.role);
             } else {
@@ -55,45 +55,39 @@ const EditUser = () => {
 
     const updateUser = async (id, userData) => {
         try {
-          const response = await fetch(`http://localhost:4000/api/user/${userId}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-          });
-          if (!response.ok) {
-            throw new Error('Failed to update user');
-          }
-          // Optionally, handle success (e.g., show a success message)
-          console.log('User updated successfully');
+            const response = await fetch(`http://localhost:4000/api/user/${userId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update user');
+            }
+            setSuccessMessage("User updated successfully!");
         } catch (error) {
-          // Handle errors (e.g., show an error message)
-          console.error('Failed to update user:', error.message);
+            console.error('Failed to update user:', error.message);
         }
-      };
-    
-      const handleSubmit = async (e) => {
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const userData = { email,firstName,lastName,addressLine1,addressLine2,contact,role };
-          await updateUser(userId, userData); // Call the updateUser function
+            const userData = { email,firstName,lastName,addressLine1,addressLine2,contact,role };
+            await updateUser(userId, userData);
 
-          setEmail('');
-          setFirstName('');
-          setLastName('');
-          setAddressLine1('');
-          setAddressLine2('');
-          setContact('');
-          setRole('');
+            setEmail('');
+            setFirstName('');
+            setLastName('');
+            setAddressLine1('');
+            setAddressLine2('');
+            setContact('');
+            setRole('');
+        } catch (error) {
+            console.error('Failed to update user:', error.message);
         }
-      
-        
-        catch (error) {
-          console.error('Failed to update user:', error.message);
-        }
-      };
-    
+    };
 
     return (
         <div>
@@ -110,13 +104,12 @@ const EditUser = () => {
                             </AlertDescription>
                         </Alert>
                     )}
-
-                    {isSuccess && (
+                    {successMessage && (
                         <Alert className="bg-green-200">
                             <AlertCircle className="w-4 h-4" />
                             <AlertTitle>Success</AlertTitle>
                             <AlertDescription>
-                                User added successfully!
+                                {successMessage}
                             </AlertDescription>
                         </Alert>
                     )}
@@ -133,15 +126,6 @@ const EditUser = () => {
                                     required
                                 />
                             </div>
-                            {/* <div className="grid gap-2">
-                                <Label htmlFor="brand">Password</Label>
-                                <Input
-                                    type="password"
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    value={password}
-                                    required
-                                />
-                            </div> */}
                             <div className="grid gap-2">
                                 <Label htmlFor="model">First Name</Label>
                                 <Input
@@ -218,3 +202,4 @@ const EditUser = () => {
 };
 
 export default EditUser;
+

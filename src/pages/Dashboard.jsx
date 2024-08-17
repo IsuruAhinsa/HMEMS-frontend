@@ -13,6 +13,18 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import  WardPrList from "./purchasing/WardAdminPrReqList"
 import UserList from "./users/UserList";
 import EquipmentList from "./equipment/equipmentList";
+import defineVendorAbilities from "../lib/venderability";
+import  RepairRequestList from "./Repair/RepairReqList";
+
+import defineTechnicientAbilities from "@/lib/Technicient";
+import adminPr from "../assets/imges/adminPr.gif";
+import quatation from "../assets/imges/quatation.gif";
+import medicalhistory from "../assets/imges/medical-history.gif";
+import SuperAdminPrList from "./purchasing/SuperAdminPrList";
+//mport { defineAbility } from "@casl/ability";
+
+//import { AbilityContext } from "../lib/Technicient";
+
 import {
   Activity,
   ArrowUpRight,
@@ -48,6 +60,22 @@ const Dashboard = () => {
     const abilities = defineAbilities(user);
     const canNotCreateUser = abilities.can("create", "User");
     const canCreateUser=abilities.cannot("create","User")
+    
+    const vendorAbility =defineVendorAbilities(user);
+    const canNotCreateQuotation=vendorAbility.can("create","Quotation")
+   const canCreateQuotation =vendorAbility.cannot ("create","Quotation")
+    const canDisplay =vendorAbility.can ("display", "Dashboard")
+    const canNotDisplay =vendorAbility.cannot ("display", "Dashboard")
+   
+   //electrision
+  const technicientAbility=defineTechnicientAbilities(user);
+  
+    // Check if the user has the ability to view the Electrician card
+    const canViewCard = technicientAbility.can('view', 'ElectricianCard');
+    const cannotViewCard = technicientAbility.cannot('view', 'ElectricianCard');
+    const canDisplaytoelectic =technicientAbility.can ("display", "Dashboard");
+    const canNotDisplaytoelectic =technicientAbility.cannot ("display", "Dashboard")
+  //  const ability = React.useContext(AbilityContext);
    
   return (
     <>
@@ -67,11 +95,17 @@ x-chunk="dashboard-01-chunk-0 "
 </CardHeader>
 
 <img src={purchasing} className="w-20 ml-4" />
-<CardContent>
-  <Link to="/create/purchasing-req">
-    <Button className="h-8 bg-blue-500">Purchase</Button>
-  </Link>
-</CardContent>
+<CardContent className="p-4">
+      <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
+        <Link to="/create/purchasing-req" className="flex-1">
+          <Button className="w-full h-8 bg-blue-500">Purchase</Button>
+        </Link>
+
+        <Link to="/superadmin/purshasinglist" className="flex-1">
+          <Button className="w-full h-8 bg-blue-500">Purchase History</Button>
+        </Link>
+      </div>
+    </CardContent>
 </Card>
       
       
@@ -79,22 +113,50 @@ x-chunk="dashboard-01-chunk-0 "
 }
         
 
+{canCreateUser && canCreateQuotation && cannotViewCard &&
+    <Card
+    className="border border-green-500"
+    x-chunk="dashboard-01-chunk-0 "
+  >
+    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+      <CardTitle className="text-sm font-medium">
+       Ward Equipments Purchasing request
+      </CardTitle>
+      <Bell className="w-4 h-4 text-muted-foreground" />
+    </CardHeader>
+
+    <img src={wardprimg} className="w-20 ml-4" />
+    <CardContent>
+      <Link to="/wardadmin/purchasingreq">
+        <Button className="h-8 bg-blue-500">Purchase</Button>
+      </Link>
+    </CardContent>
+  </Card>
+}
+
+
+
+
+
+
+
         
-        {canCreateUser && 
+
+{canNotCreateQuotation && 
             <Card
             className="border border-green-500"
             x-chunk="dashboard-01-chunk-0 "
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">
-               Ward Equipments Purchasing request
+               Set Quatation
               </CardTitle>
               <Bell className="w-4 h-4 text-muted-foreground" />
             </CardHeader>
   
-            <img src={wardprimg} className="w-20 ml-4" />
+            <img src={ quatation} className="w-20 ml-4" />
             <CardContent>
-              <Link to="/wardadmin/purchasingreq">
+              <Link to="/vendor/quatation/setquatation">
                 <Button className="h-8 bg-blue-500">Purchase</Button>
               </Link>
              
@@ -105,15 +167,78 @@ x-chunk="dashboard-01-chunk-0 "
         
         
         }
+
+    
+{canNotCreateQuotation &&   canDisplay &&  
+            <Card
+            className="border border-green-500"
+            x-chunk="dashboard-01-chunk-0 "
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium">
+              Super Admin Purchasing Request
+              </CardTitle>
+              <Bell className="w-4 h-4 text-muted-foreground" />
+            </CardHeader>
+  
+            <img src={ adminPr} className="w-20 ml-4" />
+            <CardContent>
+              <Link to="/superadmin/purshasinglist">
+                <Button className="h-8 bg-blue-500">Show Request</Button>
+              </Link>
+             
+             
+            </CardContent>
+          </Card>
+  
+        
+        
+        }
+
+
+
+
+
+
+
+
+
+        
+    {canNotCreateQuotation && 
+            <Card
+            className="border border-green-500"
+            x-chunk="dashboard-01-chunk-0 "
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium">
+              Quatation History
+              </CardTitle>
+              <Bell className="w-4 h-4 text-muted-foreground" />
+            </CardHeader>
+  
+            <img src={medicalhistory} className="w-20 ml-4" />
+            <CardContent>
+              <Link to="/wardadmin/purchasingreq">
+                <Button className="h-8 bg-blue-500">Purchase</Button>
+              </Link>
+             
+              
+            </CardContent>
+          </Card>
+          
+         
+        
+          
+        }
+    
     
 
 
 
 
-
         
         
-       { canNotCreateUser && 
+       { canNotCreateUser &&   
             <Card
             className="border border-green-500"
             x-chunk="dashboard-01-chunk-0"
@@ -145,7 +270,7 @@ x-chunk="dashboard-01-chunk-0 "
           
         }
         
-          {canCreateUser &&
+          {canCreateUser &&  canCreateQuotation && cannotViewCard && 
             <Card
             className="border border-green-500"
             x-chunk="dashboard-01-chunk-0"
@@ -168,7 +293,7 @@ x-chunk="dashboard-01-chunk-0 "
           
           
           }
-          {canCreateUser &&
+          {canCreateUser &&  canCreateQuotation && cannotViewCard &&
           <Card
             className="border border-green-500"
             x-chunk="dashboard-01-chunk-0"
@@ -195,6 +320,7 @@ x-chunk="dashboard-01-chunk-0 "
           
           </Card>
 }
+
         
        {/* {canCreateAssets(
              <Card
@@ -214,74 +340,120 @@ x-chunk="dashboard-01-chunk-0 "
        )} */}
       
     
+{/* {
+   canCreateQuotation && cannotViewCard &&
+   <Card
+   className="border border-green-500"
+   x-chunk="dashboard-01-chunk-0"
+ >
+   <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+     <CardTitle className="text-sm font-medium">
+       Emergency request
+     </CardTitle>
+     <Bell className="w-4 h-4 text-muted-foreground" />
+   </CardHeader>
 
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Emergency request
-            </CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+   <img src={emergancy} className="w-16 mb-4 ml-4" />
+   <CardContent>
+     <Button className="h-8 bg-blue-500">Show Requests</Button>
+   </CardContent>
+ </Card>
+} */}
+  
+{canCreateQuotation && cannotViewCard && canCreateUser &&
+ <Card
+ className="border border-green-500"
+ x-chunk="dashboard-01-chunk-0"
+>
+ <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+   <CardTitle className="text-sm font-medium">
+     Repair request
+   </CardTitle>
+   <Bell className="w-4 h-4 text-muted-foreground" />
+ </CardHeader>
 
-          <img src={emergancy} className="w-16 mb-4 ml-4" />
-          <CardContent>
-            <Button className="h-8 bg-blue-500">Show Requests</Button>
-          </CardContent>
-        </Card>
+ <img src={rapair} className="w-20 ml-4" />
+ 
+ <CardContent>
 
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Repair request
-            </CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+ <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-6">
 
-          <img src={rapair} className="w-20 ml-4" />
-          <CardContent>
-            <Button className="h-8 bg-blue-500">Show Requests</Button>
-          </CardContent>
-        </Card>
+ <Link to={"/wardAdmin/request/repairRequest"}>
+ 
+   <Button className="h-8 bg-blue-500">request</Button>
 
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-               Ward purchasing Request
-            </CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+ </Link>
 
-          <img src={onging} className="w-20 ml-4" />
-          <CardContent>
-            <Link to={"/wardadmin/wardpurchasingreqlist"}><Button className="h-8 bg-blue-500">Show Requests</Button></Link>
-          </CardContent>
-        </Card>
+ <Link to={"/vendor/repairreqdetailsList/accept/list"}>
+ 
+   <Button className="h-8 bg-blue-500">Accept request</Button>
 
-        <Card
-          className="border border-green-500"
-          x-chunk="dashboard-01-chunk-0"
-        >
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Disposal request
-            </CardTitle>
-            <Bell className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
+ </Link>
+ </div>
+ </CardContent>
+</Card>
 
-          <img src={reject} className="w-20 ml-4" />
-          <CardContent>
-            <Button className="h-8 bg-blue-500">Show Requests</Button>
-          </CardContent>
-        </Card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+{canCreateQuotation && cannotViewCard &&
+
+<Card
+className="border border-green-500"
+x-chunk="dashboard-01-chunk-0"
+>
+<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+  <CardTitle className="text-sm font-medium">
+     Ward purchasing Request
+  </CardTitle>
+  <Bell className="w-4 h-4 text-muted-foreground" />
+</CardHeader>
+
+<img src={onging} className="w-20 ml-4" />
+<CardContent>
+  <Link to={"/wardadmin/wardpurchasingreqlist"}><Button className="h-8 bg-blue-500">Show Requests</Button></Link>
+</CardContent>
+</Card>
+
+
+
+}
+      
+{/* {canCreateQuotation && cannotViewCard && 
+
+<Card
+className="border border-green-500"
+x-chunk="dashboard-01-chunk-0"
+>
+<CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+  <CardTitle className="text-sm font-medium">
+    Disposal request
+  </CardTitle>
+  <Bell className="w-4 h-4 text-muted-foreground" />
+</CardHeader>
+
+<img src={reject} className="w-20 ml-4" />
+<CardContent>
+  <Button className="h-8 bg-blue-500">Show Requests</Button>
+</CardContent>
+</Card>
+
+} */}
 
 {canNotCreateUser && (
       <Card
@@ -290,7 +462,7 @@ x-chunk="dashboard-01-chunk-0 "
     >
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">Users</CardTitle>
-        <Bell className="w-4 h-4 text-muted-foreground" />
+       
       </CardHeader>
 
       <img src={userpro} className="w-20 ml-4" />
@@ -316,7 +488,9 @@ x-chunk="dashboard-01-chunk-0 "
 
      <img src={userpro} className="w-20 ml-4" />
      <CardContent>
+      <Link to={"/vendor/quatation/setquatationList"}>
        <Button className="h-8 bg-blue-500">Show Requests</Button>
+       </Link>
      </CardContent>
    </Card>
 
@@ -325,6 +499,7 @@ x-chunk="dashboard-01-chunk-0 "
    
       </div>
   <div className="grid w-full gap-10 md:grid-cols-2 lg:grid-cols-2 ">
+    
   {canNotCreateUser &&
   <div >
     <Card >
@@ -334,8 +509,10 @@ x-chunk="dashboard-01-chunk-0 "
     </Card>
   </div>
   }
+  
 
-{canCreateUser &&
+{canCreateUser &&  canCreateQuotation && cannotViewCard &&
+    
 <div >
     <Card >
       <CardContent className="mt-4 -ml-16 ">
@@ -345,16 +522,46 @@ x-chunk="dashboard-01-chunk-0 "
   </div>
 }
   <div>
+  
+    
+    {canCreateQuotation && cannotViewCard && 
+    
     <Card >
-      <CardContent className="-ml-12 "><WardPrList /></CardContent>
-      
-    </Card>
+    <CardContent className="-ml-12 "><WardPrList /></CardContent>
+  </Card>
+    
+    }
+    
+   
   </div>
+  
+  
 </div>
+
+<div>
+{ cannotViewCard &&
+  
+  <Card >
+    
+    <CardContent className="-ml-12 "><SuperAdminPrList /></CardContent>
+  </Card>  }
+</div>
+
+
+{/* Electrician Form */}
+
+
+
+
+{canViewCard  && (
+       <div><RepairRequestList></RepairRequestList> </div>
+)}
+
 
 
 
     </>
+    
   );
 };
 

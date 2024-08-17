@@ -267,7 +267,7 @@ const AddEquipment = () => {
                                 <Label htmlFor="purchasingDate">Purchasing Date</Label>
                                 <Input
                                     id="purchasingDate"
-                                    type="date"
+                                    type="text"
                                     required
                                     onChange={(e) => setPurchasingDate(e.target.value)}
                                     value={purchasingDate}
