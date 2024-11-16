@@ -28,14 +28,14 @@ const UserList = () => {
   const [sortBy, setSortBy] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
   const [visibleColumns, setVisibleColumns] = useState([
-    "_id",
+    //"_id",
     "firstName",
     "lastName",
     "email",
     "role",
     "addressLine1",
     "addressLine2",
-    "ward",
+   // "ward",
   ]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);

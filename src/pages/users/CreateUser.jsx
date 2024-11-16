@@ -36,15 +36,21 @@ const CreateUser = () => {
                 ward // Include ward in addUser function
             );
             // Clear input fields on success
-            setEmail("");
-            setPassword("");
-            setFirstName("");
-            setLastName("");
-            setAddressLine1("");
-            setAddressLine2("");
-            setContact("");
-            setRole("");
-            setWard(""); // Clear selected ward
+        
+            if (error && error.path === contact) { // Check if there is an error related to contact field
+                setEmail("");
+                setPassword("");
+                setFirstName("");
+                setLastName("");
+                setAddressLine1("");
+                setAddressLine2("");
+                setRole("");
+                setWard(""); // Clear only the contact field
+            } else if (isSuccess) { // Check if the operation is successful
+             
+            }
+            
+             // Clear selected ward
             
         } catch (error) {
             console.error('addUser failed:', error.message);
@@ -125,6 +131,8 @@ const CreateUser = () => {
                                     value={addressLine2}
                                 />
                             </div>
+
+                            
                             <div className="grid gap-2">
                                 <Label htmlFor="genericName">Contact</Label>
                                 <Input
@@ -134,6 +142,9 @@ const CreateUser = () => {
                                     required
                                 />
                             </div>
+
+
+                            
                             <div className="grid gap-2">
                                 <Label htmlFor="role">Role</Label>
                                 <Select onValueChange={setRole}>
@@ -145,8 +156,10 @@ const CreateUser = () => {
                                             <SelectLabel>Select Role</SelectLabel>
                                             <SelectItem value="wardAdmin">Ward Admin</SelectItem>
                                             <SelectItem value="Electrician">Electrician</SelectItem>
-                                            <SelectItem value="TechnicalVendor">Technical Vendor</SelectItem>
+                                            <SelectItem value="TechnicalVendor">TecihncVendoral </SelectItem>
                                             <SelectItem value="NonTechnicalVendor">Non Technical vendor</SelectItem>
+                                            <SelectItem value="Super Administrator">Super Administrator</SelectItem>
+                                            <SelectItem value="Doctor">Doctor</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
@@ -163,6 +176,7 @@ const CreateUser = () => {
                                             <SelectGroup>
                                                 <SelectLabel>Select Ward</SelectLabel>
                                                 <SelectItem value="SurgicalWard">Surgical Ward</SelectItem>
+                                                <SelectItem value="SurgicalWard">Eye Ward</SelectItem>
                                                 <SelectItem value="MedicalWard">Medical Ward</SelectItem>
                                                 <SelectItem value="Children_Ward">Children's Ward</SelectItem>
                                                 <SelectItem value="Gynecology_Ward">Gynecology Ward</SelectItem>

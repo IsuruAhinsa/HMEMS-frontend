@@ -147,7 +147,7 @@ const EquipmentList = () => {
             />
             <Button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="right-0 px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-r shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="right-0 px-2 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-r shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               Toggle Columns
             </Button>
@@ -209,7 +209,7 @@ const EquipmentList = () => {
                         </td>
                       ))}
                       <td className="px-6 py-4 space-x-5 text-sm font-medium text-right whitespace-nowrap">
-                        <Link to={`/equipment/${equipmentItem._id}`}>
+                        <Link to={`/wardadmin/equipment/edit/${equipmentItem._id}`}>
                           <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
                         </Link>
                         <AlertDialog className="min-[320px]:text-center max-[600px]:bg-sky-300">

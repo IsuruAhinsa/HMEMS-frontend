@@ -93,7 +93,7 @@ function Header() {
                 {user.email}
               </DropdownMenuItem>
               <DropdownMenuItem>
-              <Badge>{user.role}</Badge>
+              <Badge>{user.role ||user.ward}</Badge>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               {/* <DropdownMenuItem>
